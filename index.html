@@ -4,15 +4,46 @@
   <meta charset="UTF-8">
   <title>속담 리믹스 평가기</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 80px; background: #f7f8fa; }
+    body { font-family: sans-serif; text-align: center; margin-top: 80px; background: #f7f8fa; overflow: hidden; }
     h1 { font-size: 2em; margin-bottom: 10px; }
     button { padding: 10px 20px; font-size: 1em; margin: 10px; border: none; border-radius: 10px; cursor: pointer; background: #4f8cff; color: white; }
     button:hover { background: #336dff; }
     input, textarea { width: 80%; max-width: 500px; padding: 10px; margin: 10px auto; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; display: block; }
     #result { font-size: 1.3em; margin-top: 20px; white-space: pre-line; }
+
+    /* 로고 시작 화면 */
+    #splash {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #f7f8fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: fadeOut 0.8s ease-in-out forwards;
+      animation-delay: 2s;
+    }
+    #splash img {
+      width: 180px;
+      height: auto;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
   </style>
 </head>
 <body>
+  <!-- 로고 인트로 -->
+  <div id="splash">
+    <img src="logo.png" alt="Logo">
+  </div>
+
   <h1>🐸 속담 리믹스 평가기</h1>
   <button id="loadBtn">속담 뽑기</button>
   <div id="proverbBox"></div>
@@ -23,6 +54,14 @@
   <script>
     const GEMINI_API_KEY = "AIzaSyDh-q2qOEHBgzDUIA3Psd9XwSgTYMkOo64";
     let currentProverb = "";
+
+    // 2초 후 로고 사라지게
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.body.style.overflow = "auto";
+      }, 2800); // fadeOut 포함 총 2.8초
+    });
 
     async function loadProverb() {
       const res = await fetch("proverbs.csv");
@@ -45,7 +84,8 @@
 리믹스: "${remix}"
 
 이 리믹스 문장이 얼마나 참신하고 웃긴지 0~100점으로 평가하고, 
-그 점수를 준 이유를 한 줄로 설명해줘. 그리고 점수는 조금 낮게 평가해줘. 비속어가 포함되면 보너스 점수 30점 정도 줘. 
+그 점수를 준 이유를 한 줄로 설명해줘. 그리고 점수는 조금 낮게 평가해줘. 
+비속어가 포함되면 보너스 점수 30점 정도 줘. 
 
 출력 형식:
 점수: (숫자)
