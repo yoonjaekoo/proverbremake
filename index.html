@@ -21,6 +21,7 @@
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
       z-index: 1000;
+      pointer-events: none; /* 클릭 막지 않게 */
     }
     #logo.show { opacity: 1; }
 
@@ -56,7 +57,10 @@
     window.addEventListener("load", () => {
       const logo = document.getElementById("logo");
       logo.classList.add("show");
-      setTimeout(() => logo.classList.remove("show"), 2000);
+      setTimeout(() => {
+        logo.classList.remove("show");
+        logo.style.display = "none"; // 완전히 제거
+      }, 2000);
     });
 
     async function loadProverb() {
